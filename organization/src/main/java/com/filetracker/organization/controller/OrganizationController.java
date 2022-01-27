@@ -1,5 +1,6 @@
 package com.filetracker.organization.controller;
 
+import com.filetracker.organization.dto.CombinedResponceDto;
 import com.filetracker.organization.dto.ResponceDto;
 import com.filetracker.organization.entity.Organization;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +24,10 @@ public interface OrganizationController {
     public ResponseEntity<List<Organization>> getAllOrganization();
 
     @GetMapping("/{id}")
-    public ResponseEntity<Organization> getOrganizationByUuid(@PathVariable Long id);
+    public ResponseEntity<CombinedResponceDto> getOrganizationByUuid(@PathVariable Long id);
 
     @GetMapping("/code/{code}")
-    public ResponseEntity<Organization> getOrganizationByCode(@PathVariable String code);
+    public ResponseEntity<CombinedResponceDto> getOrganizationByCode(@PathVariable String code);
 
     @GetMapping("/country/{countryName}")
     public ResponseEntity<List<Organization>> getAllOrganizationByCountryName(@PathVariable String countryName);

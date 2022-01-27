@@ -6,14 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
-public class ValidationService {
-    private final DepartmentRepo departmentRepo;
-
-    public boolean checkDepartmentId(Department department){
-        Department tempDepartment=departmentRepo.findByDepartmentCode(department.getDepartmentCode()).orElse(null);
-        if(tempDepartment!=null){
-            if(tempDepartment.getOrganizationCode().equals(department.getOrganizationCode())){
+public record ValidationService(DepartmentRepo departmentRepo) {
+    public boolean checkDepartmentId(Department department) {
+        Department tempDepartment = departmentRepo.findByDepartmentCode(department.getDepartmentCode()).orElse(null);
+        if (tempDepartment != null && department.getDepartmentId()==null) {
+            if (tempDepartment.getOrganizationCode().equals(department.getOrganizationCode())) {
                 return false;
             }
         }

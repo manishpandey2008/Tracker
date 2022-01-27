@@ -1,10 +1,10 @@
 package com.filetracker.organization.controller;
 
+import com.filetracker.organization.dto.CombinedResponceDto;
 import com.filetracker.organization.dto.ResponceDto;
 import com.filetracker.organization.entity.Organization;
 import com.filetracker.organization.services.OrganizationService;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.apache.bcel.generic.RET;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,13 +36,13 @@ public record OrganizationControllerImp(OrganizationService organizationService)
     }
 
     @Override
-    public ResponseEntity<Organization> getOrganizationByUuid(Long id) {
+    public ResponseEntity<CombinedResponceDto> getOrganizationByUuid(Long id) {
         log.info("Get organization which Id is: "+id);
         return new ResponseEntity<>(organizationService.getOrganizationByUuid(id),HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<Organization> getOrganizationByCode(String code) {
+    public ResponseEntity<CombinedResponceDto> getOrganizationByCode(String code) {
         log.info("Get organization which Organization Code is: "+code);
         return new ResponseEntity<>(organizationService.getOrganizationByCode(code),HttpStatus.OK);
     }

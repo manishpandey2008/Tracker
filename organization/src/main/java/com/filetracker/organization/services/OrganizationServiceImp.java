@@ -1,20 +1,20 @@
 package com.filetracker.organization.services;
 
+import com.filetracker.organization.dto.CombinedResponceDto;
+import com.filetracker.organization.dto.DepartmentDto;
 import com.filetracker.organization.dto.ResponceDto;
 import com.filetracker.organization.entity.Organization;
 import com.filetracker.organization.repo.OrganizationRepo;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Slf4j
-public record OrganizationServiceImp(OrganizationRepo organizationRepo) implements OrganizationService {
+public record OrganizationServiceImp(OrganizationRepo organizationRepo, RestTemplate restTemplate) implements OrganizationService {
 
     @Override
     public ResponceDto saveOrganization(Organization organization) {
@@ -41,11 +41,17 @@ public record OrganizationServiceImp(OrganizationRepo organizationRepo) implemen
     }
 
     @Override
-    public Organization getOrganizationByUuid(Long id) {
+    public CombinedResponceDto getOrganizationByUuid(Long id) {
         log.info("Get organization which Id is: "+id+" : Service");
         try {
-            Organization allOrganization=organizationRepo.findById(id).orElse(null);
-            return allOrganization;
+            Organization tempOrganization=organizationRepo.findById(id).orElse(null);
+            CombinedResponceDto combinedResponceDto=new CombinedResponceDto();
+           if(tempOrganization!=null){
+               List<DepartmentDto>  departmentDtos= List.of(this.getListOfDepartment(tempOrganization.getOrganizationCode()));
+               combinedResponceDto.setOrganization(tempOrganization);
+               combinedResponceDto.setDepartmentDto(departmentDtos);
+           }
+            return combinedResponceDto;
         }catch (Exception e){
             log.info(e.getMessage());
             return null;
@@ -53,11 +59,17 @@ public record OrganizationServiceImp(OrganizationRepo organizationRepo) implemen
     }
 
     @Override
-    public Organization getOrganizationByCode(String code) {
+    public CombinedResponceDto getOrganizationByCode(String code) {
         log.info("Get organization which Organization Code is: "+code+" : Service");
         try {
-            Organization allOrganization=organizationRepo.findByOrganizationCode(code).orElse(null);
-            return allOrganization;
+            Organization tempOrganization=organizationRepo.findByOrganizationCode(code).orElse(null);
+            CombinedResponceDto combinedResponceDto=new CombinedResponceDto();
+            if(tempOrganization!=null){
+                List<DepartmentDto>  departmentDtos= List.of(this.getListOfDepartment(code));
+                combinedResponceDto.setOrganization(tempOrganization);
+                combinedResponceDto.setDepartmentDto(departmentDtos);
+            }
+            return combinedResponceDto;
         }catch (Exception e){
             log.info(e.getMessage());
             return null;
@@ -86,5 +98,9 @@ public record OrganizationServiceImp(OrganizationRepo organizationRepo) implemen
             log.info(e.getMessage());
             return null;
         }
+    }
+
+    public DepartmentDto[] getListOfDepartment(String organizationCode){
+        return restTemplate.getForObject("http://DEPARTMENT-SERVICE/api/department/organizationCode/"+organizationCode,DepartmentDto[].class);
     }
 }

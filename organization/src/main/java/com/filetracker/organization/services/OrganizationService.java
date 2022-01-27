@@ -1,5 +1,6 @@
 package com.filetracker.organization.services;
 
+import com.filetracker.organization.dto.CombinedResponceDto;
 import com.filetracker.organization.dto.ResponceDto;
 import com.filetracker.organization.entity.Organization;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +13,9 @@ public interface OrganizationService {
 
     public List<Organization> getAllOrganization();
 
-    public Organization getOrganizationByUuid(Long id);
+    public CombinedResponceDto getOrganizationByUuid(Long id);
 
-    public Organization getOrganizationByCode(String code);
+    public CombinedResponceDto getOrganizationByCode(String code);
 
     public List<Organization> getAllOrganizationByCountryName(String countryName);
 
