@@ -1,17 +1,22 @@
 package com.filetracker.department.services;
 
+import com.filetracker.department.dto.DepartmentFileDto;
+import com.filetracker.department.dto.FileDto;
 import com.filetracker.department.dto.ResponceDto;
 import com.filetracker.department.entity.Department;
 import com.filetracker.department.repo.DepartmentRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @Service
-public record DepartmentServiceImp(DepartmentRepo departmentRepo,ValidationService validationService) implements DepartmentService {
+public record DepartmentServiceImp(DepartmentRepo departmentRepo,
+                                   ValidationService validationService,
+                                   RestTemplate restTemplate) implements DepartmentService {
 
     @Override
     public ResponceDto saveDepartment(Department department) {
@@ -67,11 +72,15 @@ public record DepartmentServiceImp(DepartmentRepo departmentRepo,ValidationServi
     }
 
     @Override
-    public Department getDepartmentByCode(String code) {
+    public DepartmentFileDto getDepartmentByCode(String code) {
         log.info("get department from database by department Code:Service");
         try{
             Department tempDepartment=departmentRepo.findByDepartmentCode(code).orElse(null);
-            return tempDepartment;
+            FileDto[] files=restTemplate.getForObject("http://file-service/api/file/departmentCode/MEMCK",FileDto[].class);
+            DepartmentFileDto departmentFileDto=new DepartmentFileDto();
+            departmentFileDto.setDepartment(tempDepartment);
+            departmentFileDto.setFiles(List.of(files));
+            return departmentFileDto;
         }catch (Exception e){
             log.info(e.getMessage());
             return null;

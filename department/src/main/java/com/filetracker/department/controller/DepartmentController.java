@@ -1,5 +1,6 @@
 package com.filetracker.department.controller;
 
+import com.filetracker.department.dto.DepartmentFileDto;
 import com.filetracker.department.dto.ResponceDto;
 import com.filetracker.department.entity.Department;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +28,5 @@ public interface DepartmentController {
     public ResponseEntity<Department> getDepartmentById(@PathVariable Long id);
 
     @GetMapping("/code/{code}")
-    public ResponseEntity<Department> getDepartmentByCode(@PathVariable String code);
+    public ResponseEntity<DepartmentFileDto> getDepartmentByCode(@PathVariable String code);
 }

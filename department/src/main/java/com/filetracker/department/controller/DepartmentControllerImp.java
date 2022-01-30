@@ -1,5 +1,6 @@
 package com.filetracker.department.controller;
 
+import com.filetracker.department.dto.DepartmentFileDto;
 import com.filetracker.department.dto.ResponceDto;
 import com.filetracker.department.entity.Department;
 import com.filetracker.department.services.DepartmentService;
@@ -47,7 +48,7 @@ public record DepartmentControllerImp(DepartmentService departmentService) imple
     }
 
     @Override
-    public ResponseEntity<Department> getDepartmentByCode(String code) {
+    public ResponseEntity<DepartmentFileDto> getDepartmentByCode(String code) {
         log.info("Get department by department code "+code+" :Controller");
         return new ResponseEntity<>(departmentService.getDepartmentByCode(code), HttpStatus.OK);
     }

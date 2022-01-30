@@ -1,5 +1,6 @@
 package com.filetracker.department.services;
 
+import com.filetracker.department.dto.DepartmentFileDto;
 import com.filetracker.department.dto.ResponceDto;
 import com.filetracker.department.entity.Department;
 import org.springframework.stereotype.Service;
@@ -16,5 +17,5 @@ public interface DepartmentService {
 
     public Department getDepartmentById(Long id);
 
-    public Department getDepartmentByCode(String code);
+    public DepartmentFileDto getDepartmentByCode(String code);
 }
