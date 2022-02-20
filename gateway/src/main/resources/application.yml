@@ -1,0 +1,14 @@
+server:
+  port: 9005
+
+spring:
+  application:
+    name: GATEWAY-SERVICE
+  cloud:
+    gateway:
+
+
+
+eureka:
+  client:
+    register-with-eureka: true
